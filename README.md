@@ -10,6 +10,9 @@ Interface simples e intuitiva
 
 # Tecnologias Utilizadas:
 API ViaCEP
+vite
 Java script
+react
+
 
 Sinta-se à vontade para clonar, modificar e contribuir!
