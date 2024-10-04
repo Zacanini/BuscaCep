@@ -1,14 +1,18 @@
-import React from "react"
-import { PaginaInicial } from "./pages/PaginaInicial"
+import React, { useState } from "react";
+import { Form } from "./components/Form";
 
-function App() {
-  
+export const App = () => {
+  const [cep, setCep] = useState("");
+
+  const validCep = () => {
+    const cepAjustado = cep.replace(/\D/g, "");
+    return cepAjustado.length === 8 ? cepAjustado : null;
+  };
 
   return (
     <>
-      <PaginaInicial/>
+      <div style={{marginBottom:20}}>Saiba Seu Endereço</div>
+      <Form cep={cep} setCep={setCep} />
     </>
-  )
-}
-
-export default App
+  );
+};
