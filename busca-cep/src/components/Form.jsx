@@ -69,6 +69,13 @@ export const Form = () => {
             color:"green",
             fontSize:"25px",
             marginBottom:"20px"
+        },
+        erro:{
+            fontFamily:"Roboto",
+            fontWeight:"bold",
+            color:"red",
+            fontSize:"20px",
+            marginBottom:"20px"
         }
     };
 
@@ -96,6 +103,7 @@ export const Form = () => {
                     <Button
                         onClick={handleConsultar}
                         variant="outlined"
+                        color="secondary"
                         startIcon={<SearchIcon />}
                         sx={styles.buttonContainer}
                     >
@@ -108,8 +116,8 @@ export const Form = () => {
                         <div style={styles.resultContainer}>
                             {erro && (
                                 <div style={styles.errorText}>
-                                    {erro}
-                                    <Button onClick={VoltaTela} variant="outlined" startIcon={<ReplayIcon />}>
+                                    <p style={styles.erro}>{erro}</p>
+                                    <Button onClick={VoltaTela} variant="outlined" color="error" startIcon={<ReplayIcon />}>
                                         Voltar
                                     </Button>
                                 </div>
@@ -121,7 +129,7 @@ export const Form = () => {
                                     <p style={styles.rua}>Bairro: {endereco.bairro}</p>
                                     <p style={styles.rua}>Cidade: {endereco.localidade}</p>
                                     <p style={styles.rua}>Estado: {endereco.uf}</p>
-                                    <Button onClick={VoltaTela} variant="outlined" startIcon={<ReplayIcon />}>
+                                    <Button onClick={VoltaTela} variant="outlined" color="success" startIcon={<ReplayIcon />}>
                                         Voltar
                                     </Button>
                                 </div>
