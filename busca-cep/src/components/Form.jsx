@@ -1,8 +1,10 @@
 import React, { useContext, useState } from "react";
 import Box from "@mui/material/Box";
+import Button from '@mui/material/Button';
+import SearchIcon from '@mui/icons-material/Search';
+import ReplayIcon from '@mui/icons-material/Replay';
 import CircularProgress from '@mui/material/CircularProgress';
 import TextField from "@mui/material/TextField";
-
 import { CepContext } from "../context/CepContext";
 import { ConsultaEndereco } from "../services/Api.ViaCEP";
 
@@ -16,26 +18,58 @@ export const Form = () => {
         setViraTela(true);
         setCarregando(true);
 
-        // Chama a função que consulta o endereço
         const result = await ConsultaEndereco(cep);
 
         if (result.error) {
-            setErro(result.error); // Armazena a mensagem de erro
-            setEndereco(null); // Limpa o estado de endereço caso haja erro
+            setErro(result.error);
+            setEndereco(null);
         } else {
-            setEndereco(result); // Atualiza o estado com o endereço se a consulta for bem-sucedida
-            setErro(null); // Limpa o estado de erro
+            setEndereco(result);
+            setErro(null);
         }
 
         setTimeout(() => {
             setCarregando(false);
-        }, 800)
-
-
+        }, 800);
     };
 
     const VoltaTela = () => {
         setViraTela(false);
+    };
+
+    const styles = {
+        formContainer: {
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'center',
+            height: '100vh',
+        },
+        textField: {
+            m: 1,
+            width: '25ch',
+        },
+        errorText: {
+            color: 'red',
+            marginBottom: '20px',
+            textAlign: 'center',
+        },
+        resultContainer: {
+            textAlign: 'center',
+        },
+        buttonContainer: {
+            marginTop: '20px',
+        },
+        rua:{
+            fontFamily:"Roboto"
+        },
+        titulo:{
+            fontFamily:"Roboto",
+            fontWeight:"bold",
+            color:"green",
+            fontSize:"25px",
+            marginBottom:"20px"
+        }
     };
 
     return (
@@ -43,49 +77,58 @@ export const Form = () => {
             {!viraTela ? (
                 <Box
                     component="form"
-                    sx={{ '& .MuiTextField-root': { m: 1, width: '25ch' } }}
+                    sx={styles.formContainer}
                     noValidate
                     autoComplete="on"
                 >
-                    <div>
-                        <TextField
-                            value={cep}
-                            onChange={(j) => { setCep(j.target.value) }}
-                            required
-                            id="outlined-required"
-                            label="CEP"
-                            placeholder="Digite seu CEP"
-                        />
+                    <div style={styles.titulo}>
+                        PESQUISE SEU ENDEREÇO
                     </div>
-                    <button onClick={handleConsultar}>Consultar CEP</button>
+                    <TextField
+                        value={cep}
+                        onChange={(j) => { setCep(j.target.value); }}
+                        required
+                        id="outlined-required"
+                        label="CEP"
+                        placeholder="Digite seu CEP"
+                        sx={styles.textField}
+                    />
+                    <Button
+                        onClick={handleConsultar}
+                        variant="outlined"
+                        startIcon={<SearchIcon />}
+                        sx={styles.buttonContainer}
+                    >
+                        Buscar
+                    </Button>
                 </Box>
             ) : (
-
-                <>
-
-                    <Box sx={{ display: 'flex' }}>
-                        {carregando && <CircularProgress />}
-                    </Box>
-                    {!carregando && (
-                        <div>
-                            {/* Exibe a mensagem de erro, se houver */}
-                            {erro && <div style={{ color: 'red' }}>{erro}</div>}
-                            {(
-                                endereco && (
-                                    <div>
-                                        <p>Rua: {endereco.logradouro}</p>
-                                        <p>Bairro: {endereco.bairro}</p>
-                                        <p>Cidade: {endereco.localidade}</p>
-                                        <p>Estado: {endereco.uf}</p>
-                                        <button onClick={VoltaTela}>Voltar</button>
-                                    </div>
-                                )
+                <Box sx={styles.formContainer}>
+                    {carregando ? <CircularProgress /> : (
+                        <div style={styles.resultContainer}>
+                            {erro && (
+                                <div style={styles.errorText}>
+                                    {erro}
+                                    <Button onClick={VoltaTela} variant="outlined" startIcon={<ReplayIcon />}>
+                                        Voltar
+                                    </Button>
+                                </div>
+                            )}
+                            {endereco && (
+                                <div>
+                                    <div style={styles.titulo} >RESULTADO</div>
+                                    <p style={styles.rua}>Rua: {endereco.logradouro}</p>
+                                    <p style={styles.rua}>Bairro: {endereco.bairro}</p>
+                                    <p style={styles.rua}>Cidade: {endereco.localidade}</p>
+                                    <p style={styles.rua}>Estado: {endereco.uf}</p>
+                                    <Button onClick={VoltaTela} variant="outlined" startIcon={<ReplayIcon />}>
+                                        Voltar
+                                    </Button>
+                                </div>
                             )}
                         </div>
                     )}
-
-
-                </>
+                </Box>
             )}
         </>
     );
